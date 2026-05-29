@@ -67,11 +67,11 @@ function createServer(email: string, apiKey: string): McpServer {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const email = process.env.FREELO_EMAIL;
-  const apiKey = process.env.FREELO_API_KEY;
+  const email = req.headers["x-freelo-email"] as string | undefined;
+  const apiKey = req.headers["x-freelo-api-key"] as string | undefined;
 
   if (!email || !apiKey) {
-    res.status(500).json({ error: "Missing FREELO_EMAIL or FREELO_API_KEY" });
+    res.status(401).json({ error: "Missing x-freelo-email or x-freelo-api-key headers" });
     return;
   }
 
